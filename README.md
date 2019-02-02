@@ -21,9 +21,9 @@ This way all millennials can pretend they care about what their friends post on 
 
 **DATA SET**
 
-The dataset we will be using to train our object recognition model is the CIFAR-100 dataset collected by Alex Krizhevsky, Vinod Nair, and Geoffrey Hinton (Krizhvsky). This dataset contains 60,000 color images grouped into 100 classes containing 600 images each. There are 50 training images and 100 testing images per class.
+The dataset we will be using to train our object recognition model is the Caffee dataset developed by Berkeley AI Research. Caffe is a deep learning  pre-trained dataset and perfect for developing our Lazytag bot. A pre-trained dataset is necessary for our project since we are developing a sentence based on the information the dataset provides us from an image. 
 
- [https://www.cs.toronto.edu/~kriz/cifar.html](https://www.cs.toronto.edu/~kriz/cifar.html)
+ http://caffe.berkeleyvision.org/
 
 **GOALS**
 
