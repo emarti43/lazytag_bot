@@ -9,7 +9,7 @@ January 19, 2019
 
 **OVERVIEW**
 
-Wouldn&#39;t social media be so much easier if you didn&#39;t have to agonize over how to comment that friend&#39;s mundane photo? You want to seem like you paid attention-- without spending the time. To solve this worldwide problem, we decided to come up with Lazytag Bot, the comment generator for millennials with ultra-short attention spans.
+Wouldn't social media be so much easier if you didn't have to agonize over how to comment that friend's mundane photo? You want to seem like you paid attention-- without spending the time. To solve this worldwide problem, we decided to come up with Lazytag Bot, the comment generator for millennials with ultra-short attention spans.
 
 The ultimate goal of Lazytag is to grab a photo from a social media post and generate a  non-committal sentence as a comment response. The bot should:
 
@@ -65,7 +65,13 @@ Generating Textual Descriptions for Photographs
 
 **APPENDIX A: Data Set Structure**
 
-The Clarifai API will take the input of an image or a video and output probabilities based on the image. 
+The Clarifai API will take the input of an image or a video and output probabilities based on the image.
+
+Setting Up the Dataset:
+
+1. Make sure to use python 3.6
+
+2. To install do the command **pip install clarifai**
 
 **APPENDIX B: Project Timeline**
 
