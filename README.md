@@ -42,7 +42,7 @@ To reiterate, the bot will:
 **METHOD**
 
 1. Become familiar with the dataset and possibly change datasets to fit our needs
-2. Create a model in order to analyze images (i.e. tell the difference between a tree,)
+2. Create a model in order to analyze images 
 3. Become familiar with parsing the English Language
 4. Create grammar for English from a given dataset
 5. Pulling image from a social media website (Reddit or Instagram) classifying it
@@ -65,17 +65,13 @@ Generating Textual Descriptions for Photographs
 
 **APPENDIX A: Data Set Structure**
 
-Example of some of the classes in the dataset we are going to use for Lazytag Bot. CIFAR-10 contains 10 classes. Our data set is similar in structure but instead contains 100 classes with &quot;fine&quot; labels and &quot;coarse&quot; superlabels.
-
-CIFAR-10
-
-
+The Clarifai API will take the input of an image or a video and output probabilities based on the image. 
 
 **APPENDIX B: Project Timeline**
 
 **Week 3.** Become familiar with the dataset and possibly change datasets to fit our needs
 
-**Week 4.** Create a model in order to analyze images (i.e. tell the difference between a tree)
+**Week 4.** Find an image recognition api dataset that works with our project
 
 **Week 5** Become familiar with parsing the English Language
 
