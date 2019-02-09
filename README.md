@@ -42,7 +42,7 @@ To reiterate, the bot will:
 **METHOD**
 
 1. Become familiar with the dataset and possibly change datasets to fit our needs
-2. Create a model in order to analyze images 
+2. Find a image recognition dataset api for Lazytag Bot 
 3. Become familiar with parsing the English Language
 4. Create grammar for English from a given dataset
 5. Pulling image from a social media website (Reddit or Instagram) classifying it
