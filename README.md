@@ -21,9 +21,9 @@ This way all millennials can pretend they care about what their friends post on 
 
 **DATA SET**
 
-The dataset we will be using to train our object recognition model is the Caffee dataset developed by Berkeley AI Research. Caffe is a deep learning  pre-trained dataset and perfect for developing our Lazytag bot. A pre-trained dataset is necessary for our project since we are developing a sentence based on the information the dataset provides us from an image. 
+The dataset we will be using is the Clarifai API. You send inputs (an image or video) to the service and it returns probablity/predictions of what it thinks is displayed. We will use the most accurate predictions to create a sentence for a social media post. 
 
- http://caffe.berkeleyvision.org/
+ https://clarifai.com/developer/guide/predict#images
 
 **GOALS**
 
