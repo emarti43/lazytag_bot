@@ -1,3 +1,7 @@
+# LINK FOR TUTORIAL
+# https://inzaniak.github.io/pybistuffblog/posts/2017/April/simple-markov-chains-tutorial.html
+
+
 import nltk
 # declare a function to get word index
 def get_index(in_list,in_string):
