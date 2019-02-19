@@ -20,9 +20,14 @@ The ultimate goal of Lazytag is to grab a photo from a social media post and gen
 
 This way all millennials can pretend they care about what their friends post on social media. ♥️
 
+**REQUIREMENTS**
+1. Python 3.6/3.7
+2. Clarifai package  ```pip install clarifai``` or ```conda install clarifai```
+3. Markovify package ```pip install markovify``` or ```conda install markovify```
+
 **DATA SET**
 
-The dataset we will be using is the Clarifai API. You send inputs (an image or video) to the service and it returns probablity/predictions of what it thinks is displayed. We will use the most accurate predictions to create a sentence for a social media post. 
+The dataset we will be using is the Clarifai API. You send inputs (an image or video) to the service and it returns probablity/predictions of what it thinks is displayed. We will use the most accurate predictions to create a sentence for a social media post.
 
  https://clarifai.com/developer/guide/predict#images
 
@@ -43,7 +48,7 @@ To reiterate, the bot will:
 **METHOD**
 
 1. Become familiar with the dataset and possibly change datasets to fit our needs
-2. Find a image recognition dataset api for Lazytag Bot 
+2. Find a image recognition dataset api for Lazytag Bot
 3. Become familiar with parsing the English Language
 4. Create grammar for English from a given dataset
 5. Pulling image from a social media website (Reddit or Instagram) classifying it
