@@ -50,5 +50,5 @@ for i in range(5):
 # Combine the models into a single one
 both_models = markovify.combine([text_model_a,text_model_b])
 for i in range(5):
-    print("SENTENCE SENTENCE B:")
+    print("COMBINED SENTENCES:")
     print(both_models.make_sentence())
