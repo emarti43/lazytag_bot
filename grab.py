@@ -22,11 +22,12 @@ def get_comments_from_reddit_api(comment_ids,author):
 ####################################
 
 def get_comments(sr_name, comment_no):
-    i = 0
+    comments_left = comment_no
     before = None
     comment_data = ""
-    while i < 3:
-        comments = get_comments_from_pushshift(subreddit=sr_name, size=comment_no, before=before,sort='desc',sort_type='created_utc')
+    while comments_left > 0:
+        num_grab = comments_left if comments_left < 100 else 100
+        comments = get_comments_from_pushshift(subreddit=sr_name, size=num_grab, before=before,sort='desc',sort_type='created_utc')
         if not comments: break
 
         # This will get the comment ids from Pushshift in batches of 100 -- Reddit's API only allows 100 at a time
@@ -36,7 +37,7 @@ def get_comments(sr_name, comment_no):
             comment_bodies += comment['body'] + "\n"
         # This will then pass the ids collected from Pushshift and query Reddit's API for the most up to date information
         comment_data += comment_bodies
-        i+= 1
+        comments_left -= 100 
         time.sleep(2)
     return comment_data
 
