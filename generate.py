@@ -11,20 +11,12 @@ import markovify
 # Argument inputs
 subreddit = 'foodporn'
 num_comments = int(sys.argv[1])
-"""
-if (num_comments < 1):
-    num_comments = 1
-elif (num_comments > 100):
-    num_comments = 100
-"""
-#num_comments = '100'
 corpus = grab.get_comments(subreddit, num_comments)
 
-# Preprocess data
-
-# Generate
+# Train Model
 model = markovify.Text(corpus)
 
+# Generate Sentences
 for i in range(100):
     sentence = model.make_sentence()
     if (sentence != None):
