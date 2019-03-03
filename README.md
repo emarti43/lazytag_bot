@@ -23,7 +23,9 @@ This way all millennials can pretend they care about what their friends post on 
 **REQUIREMENTS**
 1. Python 3.6/3.7
 2. Clarifai package  ```pip install clarifai``` or ```conda install clarifai```
-3. Markovify package ```pip install markovify``` or ```conda install markovify```
+3. NLTK package ```pip install nltk``` or ```conda install nltk```
+4. Inflect package ```pip install inflect```
+5. Markovify package ```pip install markovify```
 
 **DATA SET**
 
