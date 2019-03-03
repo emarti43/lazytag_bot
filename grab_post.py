@@ -1,6 +1,9 @@
 import requests
 import time
 import json
+import sys
+import grab
+import markovify
 
 from clarifai import rest
 from clarifai.rest import ClarifaiApp
@@ -9,11 +12,6 @@ import sys
 
 app = ClarifaiApp(api_key='1f2c93de75074a088597cd7791491b5a')
 model = app.public_models.general_model
-
-def get_comments_from_pushshift(**kwargs):
-    r = requests.get("https://api.pushshift.io/reddit/submission/search/",params=kwargs)
-    data = r.json()
-    return data['data']
 
 '''
 def get_comments_from_reddit_api(comment_ids,author):
@@ -28,32 +26,49 @@ def get_comments_from_reddit_api(comment_ids,author):
 # Set this variable to your username
 # author = "stuck_in_the_matrix"
 ####################################
+def lazy_comment(clarifai_keywords, subreddits):
+    keywords = {}
+    for sr in subreddits:
+        r = requests.get("http://www.keyworddit.com/api/retrieve/" + sr)
+        data = r.json()
+        sr_keywords = []
+        for key in data:
+            for word in key.split():
+                sr_keywords.append(word)
+        keywords[sr] = sr_keywords
+    weights = {}
+    for key in keywords:
+        weights[key] = 0
+    for label in clarifai_keywords:
+        for sr in keywords:
+            for word in keywords[sr]:
+                if word == label: weights[sr] += 1
+    print(weights)
+    subreddit_max = max(weights, key=weights.get)
+    num_comments = 100
+    corpus = grab.get_comments(subreddit_max, num_comments)
+    # Train Model
+    model = markovify.Text(corpus)
 
-num_grab = 1
-before = None
-comment_data = ""
-while num_grab > 0:
-    comments = get_comments_from_pushshift(subreddit="pics", size=num_grab, before=before,sort='desc',sort_type='created_utc')
-    if not comments: break
+    # Generate Sentences
+    for i in range(20):
+        sentence = model.make_sentence()
+        if (sentence != None):
+            print("------------------------------")
+            print(sentence)
 
-    # This will get the comment ids from Pushshift in batches of 100 -- Reddit's API only allows 100 at a time
-    comment_bodies = ""
-    for comment in comments:
-        before = comment['created_utc'] # This will keep track of your position for the next call in the while loop
-        #comment_bodies += comment['url'] + "\n"
-        if (len(sys.argv) < 2):
-            print(comment['url'])
-            response = model.predict_by_url(comment['url'])
-        else:
-            break
-        name_map = []
-        for dict_item in response['outputs'][0]['data']['concepts']:
-        	name_map.append([dict_item['name'], dict_item['value']])
-        for item in name_map:
-        	print(item)
-    # This will then pass the ids collected from Pushshift and query Reddit's API for the most up to date information
-    num_grab -= 1
-    time.sleep(2)
+
+sample_img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_UtMjzw6-oCeHqiaiWyHVJMcv5a3Gz1UQ9DKR4t49PDKN6aQy"
+response = model.predict_by_url(sample_img)
+clarifai_keywords = []
+for dict_item in response['outputs'][0]['data']['concepts']:
+    clarifai_keywords.append(dict_item['name'])
+for item in clarifai_keywords:
+    print(item)
+subreddits = ["aww", "pics", "funny", "gaming", "AskReddit", "science", "worldnews", "todayilearned", "videos", "movies", "Music", "IAmA", "gifs", "news", "EarthPorn", "blog", "askscience", "Showerthoughts", "foodporn", "sports"]
+lazy_comment(clarifai_keywords, subreddits)
+
+
 
 
 #print(get_comments("pics", 100))
