@@ -87,17 +87,21 @@ def generate_corpus(input_keywords, subreddits):
     # a part for matching keywords
     # a part for using reddit api
 
+    # store dict of [sr name, description(array)]
     keywords = {}
     for sr in subreddits:
         r = requests.get("http://www.keyworddit.com/api/retrieve/" + sr)
         data = r.json()
 
+        # split discription of sr into array
         sr_keywords = []
         for key in data:
             for word in key.split():
                 sr_keywords.append(word)
         keywords[sr] = sr_keywords
 
+    # count frequency of keywords in each description
+    # thinking of differing weights by accuracy in clarifai returns
     weights = {}
     for key in keywords:
         weights[key] = 0
@@ -105,7 +109,10 @@ def generate_corpus(input_keywords, subreddits):
         for sr in keywords:
             for word in keywords[sr]:
                 if word == label: weights[sr] += 1
+
+    # sanity check
     print(weights)
+
     subreddit_max = max(weights, key=weights.get)
     num_comments = 100
     corpus = grab.get_comments(subreddit_max, num_comments)
