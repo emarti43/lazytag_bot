@@ -21,12 +21,14 @@ model = app.public_models.general_model
 ## Lazytag Bot ##
 # 1. Generate list of keywords from Clarifai model
 # 2. Filter the keywords
-# 3. ???
-# 4. Generate comment
+# 3. Recieve most search words from each sub-reddit from the worddit api
+# 4. Compare the keywords with most search word
+# 5. Find the subreddit that has the highest probability of producing an acurate comment
+# 6. Generate comment with comments produced from the subreddit
 
 ## Inputs ##
 # an image url
-sample_img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_UtMjzw6-oCeHqiaiWyHVJMcv5a3Gz1UQ9DKR4t49PDKN6aQy"
+sample_img = "https://images-na.ssl-images-amazon.com/images/I/41By-%2BguaYL.jpg"
 
 # list of banned words
 banned_words = {"nude"}
@@ -34,7 +36,12 @@ banned_words = {"nude"}
 # list of subreddits for training data
 subreddits = ["aww", "pics", "funny", "gaming", "AskReddit", "science", "worldnews",
 "todayilearned", "videos", "movies", "Music", "IAmA", "gifs", "news", "EarthPorn",
-"blog", "askscience", "Showerthoughts", "foodporn", "sports"]
+"blog", "askscience", "Showerthoughts", "foodporn", "sports", "explainlikeimfive",
+"books", "Jokes", "mildlyinteresting", "LifeProTips", "television", "DIY", "food",
+"space", "gadgets", "nottheonion", "Art", "photoshopbattles", "UpliftingNews", "listentothis",
+"GetMotivated", "Documentaries", "tifu", "history", "Futurology", "OldSchoolCool", "philosophy",
+"personalfinance", "dataisbeautiful", "WritingPrompts", "nosleep", "creepy", "TwoXChromosomes",
+"technology", "Fitness",  "AdviceAnimals", "interestingasfuck", "wholesomememes", "politics"]
 
 
 '''
@@ -65,7 +72,7 @@ def filter_keywords(clarifai_keywords, banned_words):
         engine = inflect.engine()
         plural = engine.plural(lemma)
         forms.add(plural)
-        
+
         # sanity check
         print(word, ": ", forms)
 
@@ -80,10 +87,12 @@ def filter_keywords(clarifai_keywords, banned_words):
     return keywords
 
 '''
-Please put info here
+input: keywords that have been filtered
+output: corpus of the most probable subreddit that will output the best comments for image
+uses the keyworrddit api, which is the most probable words used from each subreddit
 '''
 def generate_corpus(input_keywords, subreddits):
-    # a part for getting from worddit api (what api?)
+    # a part for getting from keyworddit api
     # a part for matching keywords
     # a part for using reddit api
 
@@ -114,6 +123,7 @@ def generate_corpus(input_keywords, subreddits):
     print(weights)
 
     subreddit_max = max(weights, key=weights.get)
+    print(subreddit_max)
     num_comments = 100
     corpus = grab.get_comments(subreddit_max, num_comments)
     return corpus
@@ -175,11 +185,3 @@ def get_comments_from_reddit_api(comment_ids,author):
     data = r.json()
     return data['data']['children']
 '''
-
-
-
-
-
-
-
-
