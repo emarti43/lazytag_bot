@@ -2,7 +2,6 @@ import requests
 import time
 import json
 import sys
-import grab
 
 from clarifai import rest
 from clarifai.rest import ClarifaiApp
@@ -43,12 +42,44 @@ subreddits = ["aww", "pics", "funny", "gaming", "AskReddit", "science", "worldne
 "personalfinance", "dataisbeautiful", "WritingPrompts", "nosleep", "creepy", "TwoXChromosomes",
 "technology", "Fitness",  "AdviceAnimals", "interestingasfuck", "wholesomememes", "politics"]
 
-# declare a function to get word index
+'''
+obtains comments from pushshift reddit database and
+returns json
+'''
+def get_comments_from_pushshift(**kwargs):
+    r = requests.get("https://api.pushshift.io/reddit/comment/search/",params=kwargs)
+    data = r.json()
+    return data['data']
+
+def get_comments(sr_name, comment_no):
+    i = 0
+    before = None
+    comment_data = ""
+    while i < 3:
+        comments = get_comments_from_pushshift(subreddit=sr_name, size=comment_no, before=before,sort='desc',sort_type='created_utc')
+        if not comments: break
+
+        # This will get the comment ids from Pushshift in batches of 100 -- Reddit's API only allows 100 at a time
+        comment_bodies = ""
+        for comment in comments:
+            before = comment['created_utc'] # This will keep track of your position for the next call in the while loop
+            comment_bodies += comment['body'] + "\n"
+        # This will then pass the ids collected from Pushshift and query Reddit's API for the most up to date information
+        comment_data += comment_bodies
+        i+= 1
+        time.sleep(2)
+    return comment_data
+
+'''
+declare a function to get word index
+'''
 def get_index(in_list,in_string):
     for num,row in enumerate(in_list):
         if in_string in row:
             return num
-# We convert the script from the NLTK Stopwords tutorial into a def
+'''
+We convert the script from the NLTK Stopwords tutorial into a def
+'''
 def clean_book(path):
     # Let's open the book we downloaded
     book = open(path,'r').read()
@@ -144,7 +175,7 @@ def generate_corpus(input_keywords, subreddits):
     subreddit_max = max(weights, key=weights.get)
     print(subreddit_max)
     num_comments = 500
-    corpus = grab.get_comments(subreddit_max, num_comments)
+    corpus = get_comments(subreddit_max, num_comments)
     return corpus
 
 '''
@@ -170,9 +201,11 @@ def generate_comment(model):
             print(sentence)
 
 
-# 1. Generate keywords from Clarifai model
-# input: image url, sample_img
-# output: keywords list, clarifai_keywords
+'''
+1. Generate keywords from Clarifai model
+input: image url, sample_img
+output: keywords list, clarifai_keywords
+'''
 print("##### Step 1. GENERATE KEYWORDS ######")
 response = model.predict_by_url(sample_img)
 clarifai_keywords = []
@@ -183,30 +216,25 @@ for dict_item in response['outputs'][0]['data']['concepts']:
 for item in clarifai_keywords:
     print(item)
 
-# 2. Filter the keywords:
-#   remove inappropriate words
-#   lemmatize keywords and add the morphological versions
+'''
+2. Filter the keywords:
+remove inappropriate words
+lemmatize keywords and add the morphological versions
+'''
 print("##### Step 2. CLEAN KEYWORDS ######")
 keywords = filter_keywords(clarifai_keywords, banned_words)
 
 
-# 3. Generate the training data for Markov Model.
+'''
+3. Generate the training data for Markov Model.
+'''
 print("##### Step 3. GENERATE TRAINING CORPUS ######")
 corpus = generate_corpus(keywords, subreddits)
 
-# 4. Generate the comment.
-#   Train Markov model specific to the image
-#   Create a bunch of sentences
+'''
+4. Generate the comment.
+Train Markov model specific to the image
+Create a bunch of sentences
+'''
 print("##### Step 4. MARKOV MODEL ######")
 generate_comment(model)
-
-
-'''
-def get_comments_from_reddit_api(comment_ids,author):
-    headers = {'User-agent':'Comment Collector for /u/{}'.format(author)}
-    params = {}
-    params['id'] = ','.join(["t1_" + id for id in comment_ids])
-    r = requests.get("https://api.reddit.com/api/info",params=params,headers=headers)
-    data = r.json()
-    return data['data']['children']
-'''
