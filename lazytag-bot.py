@@ -11,6 +11,17 @@ nltk.download('wordnet')
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 
+#nltk.download('twitter_samples')
+nltk.download('brown')
+from nltk.corpus import brown
+for category in brown.categories():
+    words = brown.words(categories=category)
+    text = " ".join(words) 
+    filename = 'data-markovify/' + category + '.txt'
+    outfile = open(filename, 'w') 
+    outfile.write(text) 
+    outfile.close() 
+
 import inflect
 import markovify
 
@@ -27,7 +38,7 @@ model = app.public_models.general_model
 
 ## Inputs ##
 # an image url
-sample_img = "https://images-na.ssl-images-amazon.com/images/I/41By-%2BguaYL.jpg"
+sample_img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXailQIZLn3foSyuzpm-pnxqj7bRVCJwSges0gVd1p6yZdn9A2EA"
 
 # list of banned words
 banned_words = {"nude"}
@@ -92,7 +103,6 @@ def clean_book(path):
     # We need to create a string for markovify
     text = '\n'.join([r for r in rows if r!=''])
     return text
-
 
 '''
 Clean the keyword list.
@@ -188,7 +198,9 @@ def generate_comment(model):
     model = markovify.Text(corpus)
 
     # Normalize English
-    normalizer = clean_book('data-markovify/english-grammar.txt')
+    #normalizer = clean_book('data-markovify/english-grammar.txt')
+    normalizer = open('data-markovify/news.txt')
+    #model_b = markovify.Text(normalizer)
     model_b = markovify.Text(normalizer)
 
     combined_models = markovify.combine([model, model_b])
