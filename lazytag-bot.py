@@ -17,13 +17,15 @@ import markovify
 app = ClarifaiApp(api_key='1f2c93de75074a088597cd7791491b5a')
 model = app.public_models.general_model
 
-## Lazytag Bot ##
-# 1. Generate list of keywords from Clarifai model
-# 2. Filter the keywords
-# 3. Recieve most search words from each sub-reddit from the worddit api
-# 4. Compare the keywords with most search word
-# 5. Find the subreddit that has the highest probability of producing an acurate comment
-# 6. Generate comment with comments produced from the subreddit
+'''
+Lazytag Bot
+1. Generate list of keywords from Clarifai model
+2. Filter the keywords
+3. Recieve most search words from each sub-reddit from the worddit api
+4. Compare the keywords with most search word
+5. Find the subreddit that has the highest probability of producing an acurate comment
+6. Generate comment with comments produced from the subreddit
+'''
 
 ## Inputs ##
 # an image url
@@ -52,13 +54,12 @@ def get_comments_from_pushshift(**kwargs):
     return data['data']
 
 def get_comments(sr_name, comment_no):
-    i = 0
+    comments_left = comment_no
     before = None
     comment_data = ""
-    while i < 3:
-        comments = get_comments_from_pushshift(subreddit=sr_name, size=comment_no, before=before,sort='desc',sort_type='created_utc')
+    while comments_left > 0:
+        comments = get_comments_from_pushshift(subreddit=sr_name, size=100, before=before,sort='desc',sort_type='created_utc')
         if not comments: break
-
         # This will get the comment ids from Pushshift in batches of 100 -- Reddit's API only allows 100 at a time
         comment_bodies = ""
         for comment in comments:
@@ -66,7 +67,7 @@ def get_comments(sr_name, comment_no):
             comment_bodies += comment['body'] + "\n"
         # This will then pass the ids collected from Pushshift and query Reddit's API for the most up to date information
         comment_data += comment_bodies
-        i+= 1
+        comments_left -= 100
         time.sleep(2)
     return comment_data
 
