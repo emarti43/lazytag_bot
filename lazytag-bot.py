@@ -143,7 +143,7 @@ def generate_corpus(input_keywords, subreddits):
 
     subreddit_max = max(weights, key=weights.get)
     print(subreddit_max)
-    num_comments = 100
+    num_comments = 500
     corpus = grab.get_comments(subreddit_max, num_comments)
     return corpus
 
