@@ -40,7 +40,9 @@ Lazytag Bot
 
 ## Inputs ##
 # an image url
-sample_img = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXailQIZLn3foSyuzpm-pnxqj7bRVCJwSges0gVd1p6yZdn9A2EA"
+sample_img = "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"
+if len(sys.argv) > 1:
+    sample_img = sys.argv[1]
 
 # list of banned words
 banned_words = {"nude"}
