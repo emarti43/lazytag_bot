@@ -45,7 +45,7 @@ if len(sys.argv) > 1:
     sample_img = sys.argv[1]
 
 # list of banned words
-banned_words = {"nude"}
+banned_words = {"nude", "bitch", "f u c k", "nigga", "slut", "whore", "pussy", "fuck"}
 
 # list of subreddits for training data
 subreddits = ["aww", "pics", "funny", "gaming", "AskReddit", "science", "worldnews",
